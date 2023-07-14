@@ -1,0 +1,35 @@
+﻿@model ProductViewModel
+<form method="post">
+    <div>
+        <h3>Создание нового продукта</h3>
+    </div>
+
+    <div class="text-danger font-weight-bold" asp-validation-summary="All"></div>
+
+    <div class="row">
+        <div class="col-6">
+            <label asp-for="Name"></label><br />
+            <input class="form-control" asp-for="Name" />
+            <span asp-validation-for="Name"/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <label asp-for="Description"></label><br />
+            <input class="form-control" asp-for="Description" />
+            <span asp-validation-for="Description" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <label asp-for="Cost"></label><br />
+            <input type="number" class="form-control" asp-for="Cost" />
+            <span asp-validation-for="Cost" />
+        </div>
+    </div>
+    <div>
+        <button type="submit" asp-area="Admin" asp-controller="Product" asp-action="Add">Создать</button>
+    </div>
+</form>

@@ -1,0 +1,56 @@
+﻿@model List<ProductViewModel>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+@*<h1>Заголовок 1 уровня</h1> Заголовок
+    <h3>Заголовок 3 уровня</h3>
+    <h5>Заголовок 5 уровня</h5>
+
+    <p>Привет, на пиво нет?</p>
+
+    <a href="product/index">Ссылка вне куда</a> Создание внешней ссылки
+<a href="https://rockandmill.ru">Ссылка на Rock and Mill</a> Создание внешней ссылки на яндекс
+
+    <img src="https://https://www.fonstola.ru/images/202012/fonstola.ru_418359.jpg"/> <!--Создание ссылки на изображение-->
+*@
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-3 card shadow">
+            <img class="card-img-top" src="@product.ImagePath" alt="Изображение товара" />
+            <div class="card-body">
+                <a style="color: black"
+                   asp-area=""
+                   asp-controller="Product"
+                   asp-action="Index"
+                   asp-route-id="@product.Id">
+                    <h5>@product.Name</h5>
+                </a>
+                <h5>@product.Cost руб </h5>
+                <a class="btn btn-dark"
+                   asp-area=""
+                   asp-controller="Cart"
+                   asp-action="Add"
+                   asp-route-productId="@product.Id"
+                   role="button">Добавить в корзину</a>
+
+                <a class="btn btn-success"
+                   asp-area=""
+                   asp-controller="Favorite"
+                   asp-action="Add"
+                   asp-route-productId="@product.Id"
+                   role="button">Добавить в избранное</a>
+            </div>
+        </div>
+    }
+</div>
+@*<img src="https://waggy.ru/wp-content/uploads/2020/11/bolshie-naturalnye1.jpg" />
+*@
+
+@*<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+*@

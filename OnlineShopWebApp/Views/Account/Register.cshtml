@@ -1,0 +1,48 @@
+﻿@model Register
+<form method="post">
+    <div>
+        <h3>Регистрация</h3>
+    </div>
+
+    <div class="text-danger font-weight-bold" asp-validation-summary="All"></div>
+
+    <div class="row">
+        <div class="col-6">
+            <label asp-for="UserName"></label><br /> @*Имя свойства модели для которого надо создавать Tag-Helpper*@
+            <input class="form-control" asp-for="UserName" /> @*Тип данных для которого генерится хелпер*@
+            <span asp-validation-for="UserName" /> @*Здесь будет выводиться сообщения об ошибке если валидация не прошла*@
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <label asp-for="Phone"></label><br />
+            <input class="form-control" asp-for="Phone" />
+            <span asp-validation-for="Phone" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <label asp-for="Password"></label><br />
+            <input class="form-control" asp-for="Password" />
+            <span asp-validation-for="Password" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <label asp-for="ConfirmPassword"></label><br />
+            <input class="form-control" asp-for="ConfirmPassword" />
+            <span asp-validation-for="ConfirmPassword" />
+        </div>
+    </div>
+    <div>
+        <button type="submit" asp-controller="Account" asp-action="Register">Зарегистрироваться</button>
+    </div>
+</form>
+
+@section Scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
