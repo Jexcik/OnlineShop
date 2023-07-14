@@ -32,7 +32,7 @@ namespace OnlineShopWebApp
             services.AddDbContext<IdentityContext>(options =>
             options.UseSqlServer(connection));
 
-            services.AddIdentity<User, IdentityRole>() //указываем прив€зку пользовател€ к –оли
+            services.AddIdentity<User, IdentityRole>() //указываем прив€зку пользовател€ к роле
                 .AddEntityFrameworkStores<IdentityContext>(); //работа с хранилищем данных будет идти через указанный контекст
 
 
@@ -56,8 +56,10 @@ namespace OnlineShopWebApp
 
             app.UseRouting(); //Middlewear маршрутизатор используетс€ дл€ добавлени€ шаблона маршрутизации
 
+            app.UseAuthentication();//ѕодключение аутентификации(ќтвечает кто зашел на сайт)
+            app.UseAuthorization();//ѕодключение авторизации(√оворит какой пользователь и с каким именем авторизован)
 
-            //http://localhost:5001/hello/start
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

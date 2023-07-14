@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db.Models;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
@@ -6,38 +8,37 @@ namespace OnlineShopWebApp.Controllers
     public class AccountController : Controller
     {
         private readonly IUsersManager usersManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager; //класс который хранит куки
 
-        public AccountController(IUsersManager usersManager)
+        public AccountController(IUsersManager usersManager, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             this.usersManager = usersManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl)
         {
             return View();
         }
 
         [HttpPost]
-
         public IActionResult Login(Login login)
         {
             if (ModelState.IsValid)
-                return RedirectToAction(nameof(Login));
-
-            var userAccount = usersManager.TryGetByName(login.UserName);
-            if (userAccount == null) //Если нет аккаунта то кидаем ошибку на уровне модели
             {
-                ModelState.AddModelError("", "Такого пользователя не существует");
-                return RedirectToAction(nameof(Login));
+                var result = _signInManager.PasswordSignInAsync(login.UserName, login.Password, login.RememberMe, false).Result;
+                if(result.Succeeded)
+                {
+                    return RedirectToAction(nameof(HomeController.Index), "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Неправильный пароль");
+                }
             }
-
-            if (userAccount.Password != login.Password) //Если не правильный логин и пароль
-            {
-                ModelState.AddModelError("", "Не правильный пароль");//Кидаем вот такую ошибку
-                return RedirectToAction(nameof(Login));
-            }
-            //Если дошли до сюда то отправляем на HomeController
-                return RedirectToAction(nameof(HomeController.Index), nameof(HomeController));
+            return View(login);
         }
 
 

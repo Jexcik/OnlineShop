@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace OnlineShop.Db.Migrations
 {
-    public partial class Initialization : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,6 +13,7 @@ namespace OnlineShop.Db.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     UserId = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
                     CreateDateTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>

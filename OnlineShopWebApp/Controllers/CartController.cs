@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using OnlineShop.Db;
 using OnlineShopWebApp.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineShopWebApp.Controllers
 {
+    [Authorize] //Не пускает не авторизованного пользователя выполнять методы
     public class CartController : Controller
     {
         private readonly IProductsRepository productRepository;

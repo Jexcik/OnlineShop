@@ -9,7 +9,7 @@ namespace OnlineShop.Db
     public class DatabaseContext : DbContext
     {
         //Доступ к таблицам
-        public DbSet<Product>Products { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<FavoriteProduct> FavoriteProducts { get; set; }
         public DbSet<Order> Orders { get; set; }
@@ -17,7 +17,14 @@ namespace OnlineShop.Db
         public DatabaseContext(DbContextOptions<DatabaseContext> options)
             : base(options)
         {
-            Database.Migrate(); //Применяем миграцию
+            //Database.EnsureCreated(); //Применяем миграцию
+            Database.Migrate();
+        }
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Product>().HasData(new List<Product>()
+        //    {
+        //    });
         }
     }
-}
+

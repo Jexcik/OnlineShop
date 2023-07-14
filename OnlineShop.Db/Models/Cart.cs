@@ -7,6 +7,7 @@ namespace OnlineShop.Db.Models
     {
         public Guid Id { get; set; }
         public string UserId { get; set; }
+        public string Name { get; set; }
         public List<CartItem> Items { get; set; }
         public DateTime CreateDateTime { get; set; }
         public Cart()
