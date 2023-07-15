@@ -8,7 +8,7 @@ namespace OnlineShopWebApp.Controllers
     public class AccountController : Controller
     {
         private readonly IUsersManager usersManager;
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<User> _userManager; //менеджер для работы с пользователями
         private readonly SignInManager<User> _signInManager; //класс который хранит куки
 
         public AccountController(IUsersManager usersManager, UserManager<User> userManager, SignInManager<User> signInManager)
@@ -20,7 +20,7 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Login(string returnUrl)
         {
-            return View();
+            return View(new Login() { ReturnUrl = returnUrl });
         }
 
         [HttpPost]
@@ -29,9 +29,9 @@ namespace OnlineShopWebApp.Controllers
             if (ModelState.IsValid)
             {
                 var result = _signInManager.PasswordSignInAsync(login.UserName, login.Password, login.RememberMe, false).Result;
-                if(result.Succeeded)
+                if (result.Succeeded)
                 {
-                    return RedirectToAction(nameof(HomeController.Index), "Home");
+                    return Redirect(login.ReturnUrl);
                 }
                 else
                 {

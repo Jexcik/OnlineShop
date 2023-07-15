@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db;
 using OnlineShopWebApp.Areas.Admin.Models;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area(Constants.AdminRoleName)] //Говорит о том что должен быть авторизованный доступ
+    [Authorize(Roles = Constants.AdminRoleName)] //Вот с такими ролями
     public class RoleController : Controller
     {
         private readonly IRolesRepository rolesRepository;

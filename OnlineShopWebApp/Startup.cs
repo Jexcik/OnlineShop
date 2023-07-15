@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineShop.Db;
 using OnlineShop.Db.Models;
+using System;
+using Microsoft.AspNetCore.Http;
 
 namespace OnlineShopWebApp
 {
@@ -32,8 +34,19 @@ namespace OnlineShopWebApp
             services.AddDbContext<IdentityContext>(options =>
             options.UseSqlServer(connection));
 
-            services.AddIdentity<User, IdentityRole>() //указываем привязку пользователя к роле
+            services.AddIdentity<User, IdentityRole>() //указываем тип пользователя и роли
                 .AddEntityFrameworkStores<IdentityContext>(); //работа с хранилищем данных будет идти через указанный контекст
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.ExpireTimeSpan = TimeSpan.FromHours(8);
+                options.LoginPath = "/Account/Login";
+                options.LogoutPath = "/Account/Logout";
+                options.Cookie = new CookieBuilder
+                {
+                    IsEssential = true
+                };
+            });
 
 
             services.AddTransient<IOrdersRepository, OrdersDbRepository>();

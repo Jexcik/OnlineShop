@@ -6,6 +6,8 @@ namespace OnlineShop.Db
 {
     public class IdentityContext : IdentityDbContext<User>
     {
+        public DbSet<User> Users { get; set; }
+
         public IdentityContext(DbContextOptions<IdentityContext> options) 
             : base(options)
         {
