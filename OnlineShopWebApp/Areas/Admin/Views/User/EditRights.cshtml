@@ -1,0 +1,11 @@
+﻿@model EditRightsViewModel
+
+<form method="post">
+    <div>
+        <h3>Текущие роли для пользователя @Model.UserName</h3>
+    </div>
+    @foreach (var role in Model.UserRoles)
+    {
+        <div>@role.Name</div>
+    }
+</form>

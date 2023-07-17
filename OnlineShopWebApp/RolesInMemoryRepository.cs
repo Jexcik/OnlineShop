@@ -6,18 +6,18 @@ namespace OnlineShopWebApp
 {
     public class RolesInMemoryRepository : IRolesRepository
     {
-        private readonly List<Role> roles = new List<Role>();
-        public void Add(Role role)
+        private readonly List<RoleViewModel> roles = new List<RoleViewModel>();
+        public void Add(RoleViewModel role)
         {
             roles.Add(role);
         }
 
-        public List<Role> GetAll()
+        public List<RoleViewModel> GetAll()
         {
             return roles;
         }
 
-        public Role TryGetByName(string name)
+        public RoleViewModel TryGetByName(string name)
         {
             return roles.FirstOrDefault(x=>x.Name==name);
         }

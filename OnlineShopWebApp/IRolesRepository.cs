@@ -5,9 +5,9 @@ namespace OnlineShopWebApp
 {
     public interface IRolesRepository
 	{
-        List<Role> GetAll();
-        Role TryGetByName(string Name);
-        void Add(Role role);
+        List<RoleViewModel> GetAll();
+        RoleViewModel TryGetByName(string Name);
+        void Add(RoleViewModel role);
         void Remove(string name);
     }
 }

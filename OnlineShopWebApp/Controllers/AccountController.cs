@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db;
 using OnlineShop.Db.Models;
 using OnlineShopWebApp.Models;
 
@@ -38,15 +39,12 @@ namespace OnlineShopWebApp.Controllers
             }
             return View(login);
         }
-
-
         public IActionResult Register(string returnUrl)
         {
             return View(new Register() { ReturnUrl = returnUrl });
         }
 
         [HttpPost]
-
         public IActionResult Register(Register register)
         {
             if (register.UserName == register.Password)
@@ -56,7 +54,7 @@ namespace OnlineShopWebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                User user = new User { Email=register.UserName, UserName=register.UserName};
+                User user = new User { Email=register.UserName, UserName=register.UserName, PhoneNumber=register.Phone};
 
                 //Добавляем пользователя
                 var result = userManager.CreateAsync(user, register.Password).Result;
@@ -64,6 +62,7 @@ namespace OnlineShopWebApp.Controllers
                 {
                     //установка куки
                     signInManager.SignInAsync(user, false).Wait();
+                    TryUpdateModelAsync(user);
                     return Redirect(register.ReturnUrl ?? "/Home");
                 }
                 else
@@ -75,6 +74,17 @@ namespace OnlineShopWebApp.Controllers
                 }
             }
             return View(register);
+        }
+        private void TryAssignUserRole(User user)
+        {
+            try
+            {
+                userManager.AddToRoleAsync(user,Constants.UserRoleName).Wait();
+            }
+            catch 
+            {
+
+            }
         }
     }
 }

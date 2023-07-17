@@ -17,10 +17,11 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
     public class UserController : Controller
     {
         private readonly UserManager<User> usersManager;
-
-        public UserController(UserManager<User> usersManager)
+        private readonly RoleManager<IdentityRole> rolesManager;
+        public UserController(UserManager<User> usersManager, RoleManager<IdentityRole> rolesManager)
         {
             this.usersManager = usersManager;
+            this.rolesManager = rolesManager;
         }
         public IActionResult Index()
         {
@@ -57,6 +58,26 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return RedirectToAction(nameof(ChangePassword));
+        }
+        public IActionResult Delete(string name)
+        {
+            var user = usersManager.FindByNameAsync(name).Result; //Находим пользователя
+            usersManager.DeleteAsync(user).Wait();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult EditRights(string name)
+        {
+            var user = usersManager.FindByNameAsync(name).Result; //Находим пользователя
+            var userRoles = usersManager.GetRolesAsync(user).Result;
+            var roles = rolesManager.Roles.ToList();
+            var model = new EditRightsViewModel //Модель
+            {
+                UserName = user.UserName,
+                UserRoles = userRoles.Select(x => new RoleViewModel { Name = x }).ToList(),
+                AllRoles = roles.Select(x => new RoleViewModel { Name=x.Name}).ToList()
+            };
+            return View(model);
         }
     }
 }
