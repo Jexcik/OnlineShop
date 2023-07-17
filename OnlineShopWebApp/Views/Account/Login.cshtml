@@ -28,7 +28,7 @@
             <label>Запомнить меня</label>
             <input class="form-control" type="checkbox" name="RememberMe" value="true">
 
-            <a class="form-control" href="/account/register">Регистрация нового пользователя</a>
+            <a class="form-control" asp-area="" asp-controller="Account" asp-action="Register" asp-route-ReturnUrl="@Model.ReturnUrl">Регистрация нового пользователя</a>
         </div>
     </div>
 

@@ -5,7 +5,7 @@
     </div>
 
     <div class="text-danger font-weight-bold" asp-validation-summary="All"></div>
-
+    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl"/>
     <div class="row">
         <div class="col-6">
             <label asp-for="UserName"></label><br /> @*Имя свойства модели для которого надо создавать Tag-Helpper*@

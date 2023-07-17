@@ -1,7 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
+using OnlineShop.Db.Models;
 using OnlineShopWebApp.Areas.Admin.Models;
+using OnlineShopWebApp.Helpers;
+using OnlineShopWebApp.Models;
+using System.Linq;
+
 
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
@@ -10,21 +16,21 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
     [Authorize(Roles = Constants.AdminRoleName)] //Вот с такими ролями
     public class UserController : Controller
     {
-        private readonly IUsersManager usersManager;
+        private readonly UserManager<User> usersManager;
 
-        public UserController(IUsersManager usersManager)
+        public UserController(UserManager<User> usersManager)
         {
             this.usersManager = usersManager;
         }
         public IActionResult Index()
         {
-            var userAccounts = usersManager.GetAll();
-            return View(userAccounts);
+            var users = usersManager.Users.ToList();
+            return View(users.Select(x => x.ToUserViewModel()).ToList());
         }
         public IActionResult Detail(string name)
         {
-            var userAccounts = usersManager.TryGetByName(name);
-            return View(userAccounts);
+            var user = usersManager.FindByNameAsync(name).Result;
+            return View(user.ToUserViewModel());
         }
         public IActionResult ChangePassword(string name)
         {
@@ -37,14 +43,18 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult ChangePassword(ChangePassword changePassword)
         {
-            if(changePassword.UserName == changePassword.Password)
+            if (changePassword.UserName == changePassword.Password)
             {
                 ModelState.AddModelError("", "Логин и пароль не должны совпадать!");
             }
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                usersManager.ChangePassword(changePassword.UserName, changePassword.Password);
-                    return RedirectToAction(nameof(Index));
+                var user = usersManager.FindByNameAsync(changePassword.UserName).Result;
+                //Перенести в личный кабинет пользователя
+                var newHashPassword = usersManager.PasswordHasher.HashPassword(user, changePassword.Password);
+                user.PasswordHash = newHashPassword;
+                usersManager.UpdateAsync(user).Wait();
+                return RedirectToAction(nameof(Index));
             }
             return RedirectToAction(nameof(ChangePassword));
         }

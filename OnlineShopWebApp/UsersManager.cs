@@ -7,16 +7,16 @@ namespace OnlineShopWebApp
 {
     public class UsersManager : IUsersManager
     {
-        private readonly List<UserAccount> users = new List<UserAccount>();
-        public List<UserAccount> GetAll()
+        private readonly List<UserViewModel> users = new List<UserViewModel>();
+        public List<UserViewModel> GetAll()
         {
             return users;
         }
-        public void Add(UserAccount user)
+        public void Add(UserViewModel user)
         {
             users.Add(user);
         }
-        public UserAccount TryGetByName(string name)
+        public UserViewModel TryGetByName(string name)
         {
             return users.FirstOrDefault(x => x.Name == name);
         }
@@ -24,7 +24,7 @@ namespace OnlineShopWebApp
         public void ChangePassword(string userName, string newPassword)
         {
            var account = TryGetByName(userName);
-            account.Password = newPassword;
+            //account.Password = newPassword;
         }
     }
 }

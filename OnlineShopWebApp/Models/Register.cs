@@ -19,5 +19,6 @@ namespace OnlineShopWebApp.Models
         [StringLength(100, MinimumLength = 8, ErrorMessage = "Пароль должен содержать от 8 до 100 символов")]
         [Compare("Password", ErrorMessage = "Пароли не совпадают")] //Атрибут для сравнения паролей
         public string ConfirmPassword { get; set; }
+        public string ReturnUrl { get; set; }
     }
 }

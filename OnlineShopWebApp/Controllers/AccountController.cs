@@ -7,15 +7,13 @@ namespace OnlineShopWebApp.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IUsersManager usersManager;
-        private readonly UserManager<User> _userManager; //менеджер для работы с пользователями
-        private readonly SignInManager<User> _signInManager; //класс который хранит куки
+        private readonly UserManager<User> userManager; //менеджер для работы с пользователями
+        private readonly SignInManager<User> signInManager; //класс который хранит куки
 
-        public AccountController(IUsersManager usersManager, UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
-            this.usersManager = usersManager;
-            _userManager = userManager;
-            _signInManager = signInManager;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         public IActionResult Login(string returnUrl)
@@ -28,10 +26,10 @@ namespace OnlineShopWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = _signInManager.PasswordSignInAsync(login.UserName, login.Password, login.RememberMe, false).Result;
+                var result = signInManager.PasswordSignInAsync(login.UserName, login.Password, login.RememberMe, false).Result;
                 if (result.Succeeded)
                 {
-                    return Redirect(login.ReturnUrl);
+                    return Redirect(login.ReturnUrl??"/Home");
                 }
                 else
                 {
@@ -42,9 +40,9 @@ namespace OnlineShopWebApp.Controllers
         }
 
 
-        public IActionResult Register()
+        public IActionResult Register(string returnUrl)
         {
-            return View();
+            return View(new Register() { ReturnUrl = returnUrl });
         }
 
         [HttpPost]
@@ -58,16 +56,25 @@ namespace OnlineShopWebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                usersManager.Add(new UserAccount
+                User user = new User { Email=register.UserName, UserName=register.UserName};
+
+                //Добавляем пользователя
+                var result = userManager.CreateAsync(user, register.Password).Result;
+                if(result.Succeeded) 
                 {
-                    Name = register.UserName,
-                    Password = register.Password,
-                    Phone = register.Phone
-                });
-                const string a = nameof(HomeController.Index);
-                return RedirectToAction(a, "Home");
+                    //установка куки
+                    signInManager.SignInAsync(user, false).Wait();
+                    return Redirect(register.ReturnUrl ?? "/Home");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
             }
-            return RedirectToAction(nameof(Register));
+            return View(register);
         }
     }
 }

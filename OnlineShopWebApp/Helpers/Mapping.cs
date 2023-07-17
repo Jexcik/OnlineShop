@@ -19,7 +19,7 @@ namespace OnlineShopWebApp.Helpers
 
         public static ProductViewModel ToProductViewModel(this Product product)
         {
-            
+
             return new ProductViewModel
             {
                 Id = product.Id,
@@ -70,7 +70,7 @@ namespace OnlineShopWebApp.Helpers
             {
                 Name = user.Name,
                 Address = user.Address,
-                Phone= user.Phone,
+                Phone = user.Phone,
             };
         }
 
@@ -88,7 +88,7 @@ namespace OnlineShopWebApp.Helpers
             };
         }
 
-        private static List<CartItemViewModel> ToCartItemViewModels(this List<CartItem> cartDbItems)
+        public static List<CartItemViewModel> ToCartItemViewModels(this List<CartItem> cartDbItems)
         {
             var cartItems = new List<CartItemViewModel>();
             foreach (var cartDbItem in cartDbItems)
@@ -102,6 +102,14 @@ namespace OnlineShopWebApp.Helpers
                 cartItems.Add(cartItem);
             }
             return cartItems;
+        }
+        public static UserViewModel ToUserViewModel(this User user)
+        {
+            return new UserViewModel
+            {
+                Name = user.UserName,
+                Phone = user.PhoneNumber
+            };
         }
     }
 }
