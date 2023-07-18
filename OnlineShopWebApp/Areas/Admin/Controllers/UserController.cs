@@ -6,6 +6,7 @@ using OnlineShop.Db.Models;
 using OnlineShopWebApp.Areas.Admin.Models;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 
@@ -75,9 +76,25 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             {
                 UserName = user.UserName,
                 UserRoles = userRoles.Select(x => new RoleViewModel { Name = x }).ToList(),
-                AllRoles = roles.Select(x => new RoleViewModel { Name=x.Name}).ToList()
+                AllRoles = roles.Select(x => new RoleViewModel { Name = x.Name }).ToList()
             };
             return View(model);
+        }
+        [HttpPost]
+        public IActionResult EditRights(string name, Dictionary<string, string> userRolesViewModel)
+        {
+            var userSelectedRoles = userRolesViewModel.Select(x => x.Key); //Роли которые сейчас выбраны у пользователя
+
+            var user = usersManager.FindByNameAsync(name).Result; //Находим пользователя
+            var userRoles = usersManager.GetRolesAsync(user).Result; //Находим все роли которые у этого пользователя были выбраны ранее
+
+            usersManager.RemoveFromRolesAsync(user, userRoles).Wait();
+            usersManager.AddToRolesAsync(user, userSelectedRoles).Wait();
+
+            //return RedirectToAction("Detail", name);
+
+            return Redirect($"/Admin/User/Detail?name={name}");
+
         }
     }
 }
