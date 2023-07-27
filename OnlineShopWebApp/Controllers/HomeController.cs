@@ -14,7 +14,7 @@ namespace OnlineShopWebApp.Controllers
         public HomeController(IProductsRepository productRepository)
         {
             this.productRepository = productRepository;
-        }
+        } 
 
         public IActionResult Index()
         {
